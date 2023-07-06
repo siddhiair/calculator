@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+	<link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
+	<title>Calculator</title>
+	<style type="text/css">
+		:root{
+			--primary: #1d9bf0;
+		}
+		body{
+			font-family: 'Roboto', sans-serif;
+		}
+		.calc-wrapper{
+			max-width: 350px;
+			margin: 50px auto;
+		}
+		.calc-header{
+			border: 1px solid #eee;
+			padding: 8px 15px;
+			border-radius: 4px;
+		}
+		.calc-keypad{
+			margin: 0 -5px;
+		}
+		.calc-keypad table{
+			width: 100%;
+			border-spacing: 5px;
+		}
+		.calc-keypad .key{
+			padding: 8px 15px;
+			text-align: center;
+			color: #000;
+			border-radius: 4px;
+			border: 1px solid #eee;
+			cursor: pointer;
+		}
+		.calc-keypad .key.op-key{
+			background: #eee;
+		}
+		.calc-keypad .key.equal-key{
+			background: var(--primary);
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<main>
+		<div class="calc-wrapper">
+			<div class="calc-header">
+				<div class="right-align">
+					<div class="expression-wrap mb1 h6" id="last-expression"></div>
+					<div class="calculation-wrap h2" id="current-expression">0</div>
+				</div>
+			</div>
+
+			<div class="calc-keypad">
+				<table>
+					<tbody>
+						<tr>
+							<td><div role="button" class="key op-key">(</div></td>
+							<td><div role="button" class="key op-key">)</div></td>
+							<td><div role="button" class="key op-key">%</div></td>
+							<td><div role="button" class="key op-key">AC</div></td>
+						</tr>
+						<tr>
+							<td><div role="button" class="key">7</div></td>
+							<td><div role="button" class="key">8</div></td>
+							<td><div role="button" class="key">9</div></td>
+							<td><div role="button" class="key op-key">/</div></td>
+						</tr>
+						<tr>
+							<td><div role="button" class="key">4</div></td>
+							<td><div role="button" class="key">5</div></td>
+							<td><div role="button" class="key">6</div></td>
+							<td><div role="button" class="key op-key">x</div></td>
+						</tr>
+						<tr>
+							<td><div role="button" class="key">3</div></td>
+							<td><div role="button" class="key">2</div></td>
+							<td><div role="button" class="key">1</div></td>
+							<td><div role="button" class="key op-key">-</div></td>
+						</tr>
+						<tr>
+							<td><div role="button" class="key">0</div></td>
+							<td><div role="button" class="key">.</div></td>
+							<td><div role="button" class="key equal-key">=</div></td>
+							<td><div role="button" class="key op-key">+</div></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</main>
+
+	<script>
+		const lastExprEl = document.getElementById("last-expression");
+		const currentExprEl = document.getElementById("current-expression");
+		const opKeys = ["+","-","x","/"];
+
+		const displayExpr = e => {
+			let currentExpr = currentExprEl.innerText;
+
+			let lastChar = currentExpr.slice(-1);
+			let typedText = e.target.innerText;
+
+			//if calc is at default state with 0
+			if(currentExpr === "0"){
+				currentExprEl.innerText = typedText;
+			}
+
+			//if user types operator key when last typed character is also an operator key
+			else if(opKeys.includes(lastChar) && opKeys.includes(typedText)){
+				let newExpr = currentExpr.slice(0,currentExpr.lastIndexOf(lastChar));
+				currentExprEl.innerText = newExpr += typedText;
+			}
+
+			//append char if above both conditions are false
+			else{
+				currentExprEl.innerText = currentExpr += typedText;
+			}
+		}
+
+		const calculateExpr = e => {
+			
+		}
+
+
+		let keys = document.querySelectorAll(".key");
+		keys.forEach(el => {
+			if(!el.classList.contains('equal-key'))
+				el.addEventListener('click',displayExpr)
+			else if(el.classList.contains('equal-key'))
+				el.addEventListener('click',calculateExpr)
+		});
+	</script>
+</body>
+</html>
